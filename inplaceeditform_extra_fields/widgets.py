@@ -20,8 +20,7 @@ from django.forms import widgets
 from django.forms.util import flatatt
 from django.template.loader import render_to_string
 from django.utils.safestring import mark_safe
-from django.utils.simplejson import JSONEncoder
-
+import json
 
 def get_tinyMCE_js():
     return getattr(settings,
@@ -89,7 +88,7 @@ class TinyMCE(widgets.Textarea):
             value = smart_unicode(value)
         final_attrs = self.build_attrs(attrs, name=name)
         self.mce_settings['elements'] = "id_%s" % name
-        mce_json = JSONEncoder().encode(self.mce_settings).replace("\"function", "function").replace("}\"", "}")
+        mce_json = json.dumps(self.mce_settings).replace("\"function", "function").replace("}\"", "}")
         return mark_safe(u'''<div%s>%s</div>
                 <script type="text/javascript">
                     tinyMCE.init(%s);
